@@ -1,6 +1,7 @@
 import model.MainPage;
 import model.OrderPage;
 import model.RentPage;
+import model.WebDriverFactory;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,19 +17,19 @@ import static model.MainPage.HOMEPAGE;
 import static model.MainPage.YANDEXHOMEPAGE;
 
 public class YandexLogoRedirectionTest {
-    private final WebDriver driver = new ChromeDriver();
-    MainPage mainPage = new MainPage(driver);
+    private static final String DEFAULT_BROWSER_NAME = "CHROME"; // Установи значение для выбора браузера CHROME или FIREFOX
+    private WebDriver driver;
 
     @Before
     public void start() {
+        driver = WebDriverFactory.createForName(DEFAULT_BROWSER_NAME);
         driver.get(HOMEPAGE);
     }
     @Test
     public void yandexHomePageTest() {
+        MainPage mainPage = new MainPage(driver);
         mainPage.clickYandexLogo();
-
         String originalTab = driver.getWindowHandle();
-
         // Ожидание появления новой вкладки
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(
                 driver -> driver.getWindowHandles().size() > 1
@@ -41,7 +42,7 @@ public class YandexLogoRedirectionTest {
                 .orElseThrow(() -> new RuntimeException("New tab was not found"));
 
         driver.switchTo().window(newTab);
-        Assert.assertEquals("Это не главная страница Яндекса", driver.getCurrentUrl(), driver.getCurrentUrl());
+        Assert.assertEquals("Это не главная страница Яндекса", YANDEXHOMEPAGE, driver.getCurrentUrl());
     }
 
     @After

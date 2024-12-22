@@ -1,5 +1,6 @@
 import model.OrderPage;
 import model.RentPage;
+import model.WebDriverFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,8 @@ import static model.MainPage.HOMEPAGE;
 
 @RunWith(Parameterized.class)
 public class OrderCreateTest {
-    private final WebDriver driver = new ChromeDriver();
+    private static final String DEFAULT_BROWSER_NAME = "CHROME"; // Установи значение для выбора браузера CHROME или FIREFOX
+    private WebDriver driver;
     private final String name;
     private final String secondName;
     private final String address;
@@ -43,6 +45,7 @@ public class OrderCreateTest {
 
     @Before
     public void start() {
+        driver = WebDriverFactory.createForName(DEFAULT_BROWSER_NAME);
         driver.get(HOMEPAGE);
     }
 

@@ -36,6 +36,8 @@ public class MainPage {
 
     // Получение текста ответа FAQ
     public String getAnswerTextByIndex(int index) {
+        new WebDriverWait(driver, Duration.ofSeconds(3))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id(FAQANSWERELEMENT + index))); // Ждет, пока элемент станет видимым
         return driver.findElement(By.id(FAQANSWERELEMENT + index)).getText();
     }
     // Метод для клика по логотипу Яндекса

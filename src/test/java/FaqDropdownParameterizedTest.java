@@ -1,4 +1,5 @@
 import model.MainPage;
+import model.WebDriverFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,11 +16,11 @@ import static org.junit.Assert.assertEquals;
 public class FaqDropdownParameterizedTest {
 
 
-    private final WebDriver driver = new ChromeDriver();
+    private static final String DEFAULT_BROWSER_NAME = "CHROME"; // Установи значение для выбора браузера CHROME или FIREFOX
+    private WebDriver driver;
     private final int index;              // Индекс FAQ-вопроса
     private final String expectedText;   // Ожидаемый текст ответа
 
-    MainPage mainPage = new MainPage(driver);
     public FaqDropdownParameterizedTest(int index, String expectedText) {
         this.index = index;
         this.expectedText = expectedText;
@@ -41,13 +42,13 @@ public class FaqDropdownParameterizedTest {
 
     @Before
     public void start() {
+        driver = WebDriverFactory.createForName(DEFAULT_BROWSER_NAME);
         driver.get(HOMEPAGE);
     }
 
     @Test
     public void testFaqDropdownAnswers() {
-
-
+        MainPage mainPage = new MainPage(driver);
         WebElement questionElement = mainPage.getQuestionElement(index);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", questionElement);
         mainPage.clickQuestionElement(questionElement);
